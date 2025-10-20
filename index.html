@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tudo sobre Tkinter – Guia Completo e Interativo</title>
+<style>
+:root{
+  --azul:#0077cc;
+  --azul-escuro:#004d99;
+  --branco:#f8fbff;
+  --preto:#111;
+  --cinza:#f0f0f0;
+  --verde:#28a745;
+  --vermelho:#dc3545;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:"Segoe UI",Arial,sans-serif;
+  background-color: var(--branco);
+  color: var(--preto);
+  transition: background 0.8s,color 0.8s;
+}
+body.dark{
+  background-color: var(--preto);
+  color: var(--branco);
+}
+header{
+  background: linear-gradient(-45deg,var(--azul),var(--azul-escuro),#3399ff,#66ccff);
+  background-size: 400% 400%;
+  color:white;
+  text-align:center;
+  padding:60px 20px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.25);
+  animation: gradientBG 10s ease infinite;
+}
+@keyframes gradientBG{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+header h1{font-size:2.8em;margin-bottom:10px;letter-spacing:1px;}
+header p{font-size:1.2em;opacity:0.9;}
+nav{
+  background:white;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  border-bottom:2px solid #cce0ff;
+  position: sticky;
+  top:0;
+  z-index:100;
+  transition: background 0.5s;
+}
+nav.dark{background:#222;}
+nav a{
+  color: var(--azul);
+  text-decoration:none;
+  font-weight:bold;
+  padding:15px 25px;
+  transition: background 0.3s,color 0.3s,transform 0.3s;
+}
+nav a:hover{background: var(--azul);color:white;border-radius:6px;transform:scale(1.1);}
+main{
+  max-width:1100px;
+  margin:40px auto;
+  background:white;
+  padding:40px;
+  border-radius:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  transition: background 0.5s,color 0.5s;
+}
+main.dark{background:#111;color:white;}
+section{opacity:0;transform:translateY(50px);transition: all 0.8s;}
+section.visible{opacity:1;transform:translateY(0);}
+h2{color:var(--azul);border-bottom:3px solid #cce0ff;padding-bottom:6px;margin-top:40px;}
+h3{color:var(--azul-escuro);}
+code{background:#eef5ff;padding:3px 6px;border-radius:4px;font-family:Consolas,monospace;color:#003366;}
+pre{background:#272822;color:#f8f8f2;padding:15px;border-radius:8px;overflow-x:auto;transition: all 0.8s;}
+.caixa{
+  background:#f0f8ff;border-left:5px solid var(--azul);
+  padding:15px;margin:15px 0;border-radius:6px;transition:background 0.5s,color 0.5s;
+  animation: pulse 2s infinite;
+}
+.caixa.dark{background:#222;color:white;border-left:5px solid var(--azul-escuro);}
+@keyframes pulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.02);}
+  100%{transform:scale(1);}
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:25px;}
+@media(max-width:768px){.grid{grid-template-columns:1fr;}}
+.game-section{
+  background:#f9fcff;
+  border:2px solid #cce0ff;
+  padding:25px;
+  border-radius:10px;
+  margin:35px 0;
+  text-align:center;
+  transition: background 0.5s,color 0.5s,transform 0.5s;
+}
+.game-section.dark{background:#222;color:white;border-color:#444;}
+canvas{
+  display:block;margin:20px auto;
+  background:linear-gradient(45deg,#111,#000);
+  border:2px solid var(--azul);
+  box-shadow:0 0 10px var(--azul);
+  transition: box-shadow 0.5s;
+}
+canvas:hover{box-shadow:0 0 20px #66ccff;}
+button{
+  background: var(--azul);
+  color:white;
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  font-size:1em;
+  cursor:pointer;
+  transition: background 0.3s,transform 0.3s,box-shadow 0.3s;
+}
+button:hover{background:var(--azul-escuro);transform:scale(1.1);box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+input[type=number]{padding:6px 10px;border-radius:5px;border:1px solid #ccc;transition:all 0.3s;}
+input[type=number]:focus{border-color:var(--azul);box-shadow:0 0 6px var(--azul);}
+footer{text-align:center;padding:25px;background:var(--azul);color:white;margin-top:50px;font-weight:500;transition:background 0.5s,color 0.5s;}
+footer.dark{background:var(--azul-escuro);}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Tudo sobre Tkinter</h1>
+<p>Guia Completo e Interativo</p>
+</header>
+
+<nav id="menu">
+<a href="#introducao">Introdução</a>
+<a href="#widgets">Widgets</a>
+<a href="#layout">Layout</a>
+<a href="#eventos">Eventos</a>
+<a href="#exemplos">Exemplos</a>
+<a href="#jogos">Jogos</a>
+<a href="#recursos">Recursos</a>
+</nav>
+
+<main id="conteudo">
+<section id="introducao">
+<h2>O que é Tkinter?</h2>
+<p>Tkinter é a biblioteca gráfica padrão do Python, permitindo criar aplicações desktop com janelas, botões, menus e formulários de forma fácil e intuitiva.</p>
+<div class="caixa">💡 Tkinter é a ponte entre Python e o toolkit Tcl/Tk.</div>
+</section>
+
+<section id="widgets">
+<h2>Widgets Principais</h2>
+<div class="grid">
+<div>
+<h3>Widgets</h3>
+<ul>
+<li>Label – exibe textos ou imagens</li>
+<li>Button – executa ações ao clicar</li>
+<li>Entry – campo de entrada de texto</li>
+<li>Text – campo de texto multilinha</li>
+<li>Frame – contêiner para organizar outros widgets</li>
+<li>Canvas – área para gráficos, desenhos e jogos</li>
+</ul>
+</div>
+<div>
+<h3>Layouts</h3>
+<ul>
+<li>pack() – organiza widgets empilhados</li>
+<li>grid() – organiza em linhas e colunas</li>
+<li>place() – posiciona widgets com coordenadas exatas</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section id="layout">
+<h2>Eventos e Interação</h2>
+<p>Tkinter é baseado em eventos, que podem ser capturados com funções de callback.</p>
+<pre><code>def clique(event):
+    print("Botão clicado!")
+
+botao.bind("&lt;Button-1&gt;", clique)</code></pre>
+</section>
+
+<section id="exemplos">
+<h2>Exemplo Prático</h2>
+<pre><code>import tkinter as tk
+
+janela = tk.Tk()
+janela.title("Exemplo")
+
+rotulo = tk.Label(janela, text="Olá, Tkinter!", font=("Arial",14))
+rotulo.pack(pady=10)
+
+botao = tk.Button(janela, text="Fechar", command=janela.quit)
+botao.pack()
+
+janela.mainloop()</code></pre>
+<div class="caixa">mainloop() mantém a aplicação aberta até o fechamento da janela.</div>
+</section>
+
+<section id="jogos">
+<h2>🎮 Jogos Interativos</h2>
+
+<div class="game-section" id="game1">
+<h3>1️⃣ Clique Rápido</h3>
+<p>Pontuação: <span id="score">0</span></p>
+<button id="clickButton">Clique Aqui!</button>
+<p id="timer">Tempo restante: 10s</p>
+</div>
+
+<div class="game-section" id="game2">
+<h3>2️⃣ Snake</h3>
+<canvas id="snakeGame" width="300" height="300"></canvas>
+<p>Use as setas para movimentar.</p>
+</div>
+
+<div class="game-section" id="game3">
+<h3>3️⃣ Quiz Tkinter</h3>
+<p id="quizQuestion"></p>
+<div id="quizOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px;"></div>
+<p id="quizResult"></p>
+</div>
+
+<div class="game-section" id="game4">
+<h3>4️⃣ Pong</h3>
+<canvas id="pongGame" width="300" height="200"></canvas>
+<p>Use W/S para mover a raquete esquerda.</p>
+</div>
+
+<div class="game-section" id="game5">
+<h3>5️⃣ Adivinha o Número</h3>
+<p>Escolha um número entre 1 e 100:</p>
+<input type="number" id="guessInput" min="1" max="100">
+<button id="guessBtn">Chutar</button>
+<p id="guessResult"></p>
+<p id="guessAttempts"></p>
+</div>
+
+<section id="recursos">
+<h2>Recursos Oficiais</h2>
+<ul>
+<li><a href="https://docs.python.org/3/library/tk.html" target="_blank">Documentação Tkinter</a></li>
+<li><a href="https://tkdocs.com/tutorial/" target="_blank">TkDocs Tutorial</a></li>
+<li><a href="https://realpython.com/python-gui-tkinter/" target="_blank">Real Python – Tkinter</a></li>
+</ul>
+</section>
+
+</main>
+
+<footer>
+<p>Desenvolvido por <strong>Bruno Macedo da Silva</strong> — Estudante de Engenharia de Software, Universidade de Vassouras © 2025</p>
+</footer>
+
+<script>
+// --- Tema Híbrido Dark Mode ---
+window.addEventListener("scroll",()=>{
+    document.body.classList.toggle("dark",window.scrollY>200);
+    document.querySelector("main").classList.toggle("dark",window.scrollY>200);
+    document.querySelector("nav").classList.toggle("dark",window.scrollY>200);
+    document.querySelectorAll(".caixa").forEach(c=>c.classList.toggle("dark",window.scrollY>200));
+    document.querySelectorAll(".game-section").forEach(g=>g.classList.toggle("dark",window.scrollY>200));
+    document.querySelector("footer").classList.toggle("dark",window.scrollY>200);
+});
+
+// --- Fade-in Seções ---
+const sections=document.querySelectorAll("section");
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){entry.target.classList.add("visible");}
+  });
+},{threshold:0.2});
+sections.forEach(sec=>observer.observe(sec));
+
+// --- Jogo 1: Clique Rápido ---
+let score=0,timeLeft=10,timerStarted=false;
+const button=document.getElementById("clickButton");
+const scoreDisplay=document.getElementById("score");
+const timerDisplay=document.getElementById("timer");
+button.addEventListener("click",()=>{
+  if(!timerStarted){
+    timerStarted=true;
+    const countdown=setInterval(()=>{
+      timeLeft--;
+      timerDisplay.textContent="Tempo restante: "+timeLeft+"s";
+      if(timeLeft<=0){clearInterval(countdown);button.disabled=true;timerDisplay.textContent="Fim! Pontuação: "+score;}
+    },1000);
+  }
+  if(timeLeft>0){score++;scoreDisplay.textContent=score;}
+});
+
+// --- Jogo 2: Snake ---
+const canvas=document.getElementById("snakeGame");
+const ctx=canvas.getContext("2d");
+const box=10;
+let snake=[{x:150,y:150}];
+let direction="RIGHT";
+let food={x:Math.floor(Math.random()*29)*box, y:Math.floor(Math.random()*29)*box};
+
+document.addEventListener("keydown",e=>{
+    if(e.key==="ArrowUp"&&direction!=="DOWN") direction="UP";
+    if(e.key==="ArrowDown"&&direction!=="UP") direction="DOWN";
+    if(e.key==="ArrowLeft"&&direction!=="RIGHT") direction="LEFT";
+    if(e.key==="ArrowRight"&&direction!=="LEFT") direction="RIGHT";
+});
+
+function drawSnake(){
+    ctx.fillStyle="#111"; ctx.fillRect(0,0,300,300);
+    for(let i=0;i<snake.length;i++){
+        ctx.fillStyle=i===0?"lime":"white";
+        ctx.fillRect(snake[i].x,snake[i].y,box,box);
+    }
+    ctx.fillStyle="red"; ctx.fillRect(food.x,food.y,box,box);
+    let head={x:snake[0].x,y:snake[0].y};
+    if(direction==="UP") head.y-=box;
+    if(direction==="DOWN") head.y+=box;
+    if(direction==="LEFT") head.x-=box;
+    if(direction==="RIGHT") head.x+=box;
+    if(head.x===food.x&&head.y===food.y){
+        food={x:Math.floor(Math.random()*29)*box,y:Math.floor(Math.random()*29)*box};
+    } else snake.pop();
+    if(head.x<0||head.y<0||head.x>=300||head.y>=300||snake.some(s=>s.x===head.x&&s.y===head.y)){
+        clearInterval(gameSnake); alert("Game Over!"); return;
+    }
+    snake.unshift(head);
+}
+const gameSnake=setInterval(drawSnake,100);
+
+// --- Jogo 3: Quiz Tkinter ---
+const quizQuestions=[
+    {q:"Tkinter é biblioteca padrão do Python?",a:"Sim"},
+    {q:"O método mainloop() mantém a janela aberta?",a:"Sim"},
+    {q:"Canvas não permite desenhar gráficos?",a:"Não"},
+    {q:"grid() é um gerenciador de layout?",a:"Sim"},
+    {q:"Entry serve para criar botões?",a:"Não"}
+];
+let quizIndex=0;
+const quizQuestion=document.getElementById("quizQuestion");
+const quizOptions=document.getElementById("quizOptions");
+const quizResult=document.getElementById("quizResult");
+
+function loadQuiz(){
+    if(quizIndex>=quizQuestions.length){
+        quizQuestion.textContent="Quiz finalizado!";
+        quizOptions.innerHTML="";
+        return;
+    }
+    quizQuestion.textContent=quizQuestions[quizIndex].q;
+    quizOptions.innerHTML="";
+    ["Sim","Não"].forEach(opt=>{
+        const btn=document.createElement("button");
+        btn.textContent=opt;
+        btn.onclick=()=>{
+            if(opt===quizQuestions[quizIndex].a){quizResult.textContent="✅ Correto!";}
+            else{quizResult.textContent="❌ Errado!";}
+            quizIndex++;
+            setTimeout(()=>{quizResult.textContent="";loadQuiz();},800);
+        };
+        quizOptions.appendChild(btn);
+    });
+}
+loadQuiz();
+
+// --- Jogo 4: Pong ---
+const pongCanvas=document.getElementById("pongGame");
+const pongCtx=pongCanvas.getContext("2d");
+let paddleHeight=40,paddleWidth=10,leftY=80,rightY=80,ballX=150,ballY=100,ballDX=2,ballDY=2;
+
+function drawPong(){
+  pongCtx.fillStyle="#111"; pongCtx.fillRect(0,0,300,200);
+  pongCtx.fillStyle="white";
+  pongCtx.fillRect(0,leftY,paddleWidth,paddleHeight);
+  pongCtx.fillRect(290,rightY,paddleWidth,paddleHeight);
+  pongCtx.beginPath(); pongCtx.arc(ballX,ballY,5,0,Math.PI*2); pongCtx.fill();
+
+  ballX+=ballDX; ballY+=ballDY;
+  if(ballY<0||ballY>200) ballDY*=-1;
+  if(ballX<10 && ballY>leftY && ballY<leftY+paddleHeight) ballDX*=-1;
+  if(ballX>290 && ballY>rightY && ballY<rightY+paddleHeight) ballDX*=-1;
+  if(ballX<0||ballX>300){ballX=150; ballY=100;}
+  if(rightY+20<ballY) rightY+=1.5;
+  if(rightY+20>ballY) rightY-=1.5;
+}
+setInterval(drawPong,16);
+document.addEventListener("keydown",e=>{
+  if(e.key==="w"||e.key==="W") leftY-=10;
+  if(e.key==="s"||e.key==="S") leftY+=10;
+  if(leftY<0) leftY=0;
+  if(leftY>160) leftY=160;
+});
+
+// --- Jogo 5: Adivinhação de números ---
+let targetNumber=Math.floor(Math.random()*100)+1;
+let attempts=0;
+const guessInput=document.getElementById("guessInput");
+const guessBtn=document.getElementById("guessBtn");
+const guessResult=document.getElementById("guessResult");
+const guessAttempts=document.getElementById("guessAttempts");
+
+guessBtn.addEventListener("click",()=>{
+  const guess=parseInt(guessInput.value);
+  attempts++;
+  if(guess===targetNumber){
+    guessResult.textContent="🎉 Parabéns! Você acertou!";
+    guessAttempts.textContent="Número de tentativas: "+attempts;
+    targetNumber=Math.floor(Math.random()*100)+1; attempts=0;
+  } else if(guess<targetNumber){
+    guessResult.textContent="⬆️ Tente um número maior!";
+    guessAttempts.textContent="Tentativas: "+attempts;
+  } else{
+    guessResult.textContent="⬇️ Tente um número menor!";
+    guessAttempts.textContent="Tentativas: "+attempts;
+  }
+});
+</script>
+</body>
+</html>
